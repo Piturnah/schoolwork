@@ -1,0 +1,33 @@
+SUB get_data_from_csv (fileName)
+	file <- fileName
+	data <- file AS list
+
+	CLOSE file
+	RETURN data
+ENDSUB
+
+SUB receive_new_record
+	event <- INPUT "event: "
+	gender <- INPUT "gender: "
+	performance <- INPUT "performance: "
+	
+	data <- get_data_from_csv ("wr.csv")
+	FOR record IN data
+		IF record[1] = event AND record[2] = gender AND record[3] < performance THEN
+			record[2] <- performance
+			OUTPUT "Incredible! That's a pretty good performance"
+			data_out(record)
+
+		ENDIF
+	NEXT record
+ENDSUB
+
+SUB data_out (data, fileName)
+	csv <- fileName AS list
+	csv [data [0]] <- data
+	CLOSE csv
+ENDSUB
+
+WHILE TRUE
+	receive_new_record ()
+ENDWHILE
