@@ -1,0 +1,60 @@
+// denotes comments
+
+// returns list parameter formatted for outputting [to console]
+SUB print_passwords (passwords)
+	output <- ""
+	FOR password IN passwords
+		output += password + ", "
+	NEXT password
+
+	RETURN passwords
+ENDSUB
+
+// returns list of valid passwords
+SUB get_valid_passwords (passwords)
+	// declare empty list of valid password for appending
+	validPasswords <- []
+
+	FOR password IN passwords
+		IF passwordValid(password) THEN
+			validPasswords APPEND password
+		ENDIF
+
+	NEXT password
+
+	RETURN validPasswords
+ENDSUB
+
+// returns true or false depending on argument's validity
+SUB passwordValid (password)
+	// validate password length
+	IF password LENGTH < 6 OR password LENGTH > 12 THEN
+		RETURN FALSE
+	ENDIF
+		
+
+	// check if password contains required chars
+	contains_a-z <- FALSE
+	containsNum <- FALSE
+	contains_A-Z <- FALSE
+	containsSpecialChar <- FALSE
+	FOR char IN password
+
+		// CODE returns the ASCII value of the char
+		contains_a-z <- contains_a-z OR (CODE char >= 97 AND CODE char <= 122)
+		containsNum <- containsNum OR (CODE char >= 48 AND CODE char <= 57)
+		contains_A-Z <- contains_A-Z OR (CODE char >= 65 AND CODE char <= 90)
+		containsSpecialChar <- containsSpecialChar OR (char = '$') OR (char = '#') OR (char = '@')
+	NEXT char
+
+	IF contains_a-z AND containsNum AND contains_A-Z AND containsSpecialChar THEN
+		RETURN TRUE
+	ELSE RETURN FALSE
+	ENDIF
+ENDSUB
+
+// import passwords from csv file
+_PASSWORDS <- "passwords.csv" AS list // many languages (inc python) have a built-in way to do this, else you can iterate over each line
+CLOSE "passwords.csv"
+
+OUTPUT print_passwords (get_valid_passwords)
