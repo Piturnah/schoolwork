@@ -10,7 +10,7 @@ def receive_new_record():
 
     data = get_data_from_csv ("wr.csv")
     for record in data:
-        if record[0] == event and record[1] == gender and float(record[2]) > int(performance):
+        if record[0] == event and record[1] == gender and float(record[2]) > float(performance):
             record[2] = performance
             print("New record! Saving...")
             data_out(record, data.index(record), "wr.csv")
